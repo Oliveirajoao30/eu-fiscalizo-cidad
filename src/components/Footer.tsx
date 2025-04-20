@@ -1,3 +1,4 @@
+import { Search } from "lucide-react";
 
 const Footer = () => {
   return (
@@ -5,8 +6,12 @@ const Footer = () => {
       <div className="container py-6">
         <div className="flex flex-col md:flex-row justify-between items-center">
           <div className="flex flex-col items-center md:items-start mb-4 md:mb-0">
-            <div className="text-eu-red font-bold text-xl">
-              <span className="text-eu-blue">Eu</span> Fiscalizo
+            <div className="flex items-center gap-2">
+              <Search className="w-6 h-6 text-eu-red" />
+              <div className="font-bold text-xl">
+                <span className="text-eu-red">Eu</span>
+                <span className="text-eu-text">Fiscalizo</span>
+              </div>
             </div>
             <p className="text-sm text-eu-text mt-2">
               Conectando cidadãos à gestão pública

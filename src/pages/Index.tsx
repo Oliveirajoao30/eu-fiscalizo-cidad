@@ -1,4 +1,3 @@
-
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { Link } from "react-router-dom";
@@ -52,6 +51,27 @@ const Index = () => {
               <div className="bg-white p-6 rounded-lg shadow-sm text-center">
                 <div className="bg-green-500 text-white font-bold rounded-full w-10 h-10 flex items-center justify-center mx-auto mb-4">4</div>
                 <p className="text-sm text-eu-text">Problema resolvido</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Por que usar o Eu Fiscalizo Section */}
+        <section className="py-16">
+          <div className="container">
+            <h2 className="text-2xl font-bold text-center mb-8 text-eu-text">Por que usar o Eu Fiscalizo?</h2>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-4xl mx-auto">
+              <div className="bg-white p-6 rounded-lg shadow-sm">
+                <h3 className="text-lg font-semibold mb-3 text-eu-text">Rapidez e Eficiência</h3>
+                <p className="text-sm text-eu-text/80">Envie suas demandas de forma ágil e receba atualizações em tempo real.</p>
+              </div>
+              <div className="bg-white p-6 rounded-lg shadow-sm">
+                <h3 className="text-lg font-semibold mb-3 text-eu-text">Transparência</h3>
+                <p className="text-sm text-eu-text/80">Acompanhe todo o processo de resolução da sua solicitação.</p>
+              </div>
+              <div className="bg-white p-6 rounded-lg shadow-sm">
+                <h3 className="text-lg font-semibold mb-3 text-eu-text">Participação Cidadã</h3>
+                <p className="text-sm text-eu-text/80">Contribua ativamente para a melhoria da sua cidade.</p>
               </div>
             </div>
           </div>

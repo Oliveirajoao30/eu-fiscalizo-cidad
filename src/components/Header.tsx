@@ -12,21 +12,22 @@ const Header = () => {
         <Link to="/" className="flex items-center gap-2">
           <div className="flex items-center">
             <Search className="w-8 h-8 text-eu-red" />
-            <div className="text-white font-bold text-2xl">
-              <span className="text-eu-red">Eu</span> Fiscalizo
+            <div className="font-bold text-2xl">
+              <span className="text-eu-red">Eu</span>
+              <span className="text-eu-text">Fiscalizo</span>
             </div>
           </div>
         </Link>
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-6">
-          <Link to="/" className="text-white hover:text-eu-red transition-colors">
+          <Link to="/" className="text-eu-text hover:text-eu-red transition-colors">
             Início
           </Link>
-          <Link to="/enviar-demanda" className="text-white hover:text-eu-red transition-colors">
+          <Link to="/enviar-demanda" className="text-eu-text hover:text-eu-red transition-colors">
             Enviar Demanda
           </Link>
-          <Link to="/acompanhar" className="text-white hover:text-eu-red transition-colors">
+          <Link to="/acompanhar" className="text-eu-text hover:text-eu-red transition-colors">
             Acompanhar Solicitações
           </Link>
           <Link to="/enviar-demanda" className="bg-eu-red text-white font-medium py-2.5 px-5 rounded-md hover:bg-opacity-90 transition-colors">
@@ -36,7 +37,7 @@ const Header = () => {
 
         {/* Mobile Menu Button */}
         <button
-          className="md:hidden text-white"
+          className="md:hidden text-eu-text"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
         >
           <Menu size={24} />
