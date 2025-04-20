@@ -1,3 +1,4 @@
+
 import { Search } from "lucide-react";
 
 const Footer = () => {
@@ -10,7 +11,7 @@ const Footer = () => {
               <Search className="w-6 h-6 text-eu-red" />
               <div className="font-bold text-xl">
                 <span className="text-eu-red">Eu</span>
-                <span className="text-eu-text">Fiscalizo</span>
+                <span className="text-eu-blue">Fiscalizo</span>
               </div>
             </div>
             <p className="text-sm text-eu-text mt-2">
@@ -22,17 +23,17 @@ const Footer = () => {
               <h3 className="text-eu-text font-medium mb-2">Links</h3>
               <ul className="space-y-1">
                 <li>
-                  <a href="/" className="text-sm text-eu-text hover:text-eu-red transition-colors">
+                  <a href="/" className="text-sm text-eu-blue hover:text-eu-red transition-colors">
                     Início
                   </a>
                 </li>
                 <li>
-                  <a href="/enviar-demanda" className="text-sm text-eu-text hover:text-eu-red transition-colors">
+                  <a href="/enviar-demanda" className="text-sm text-eu-blue hover:text-eu-red transition-colors">
                     Enviar Demanda
                   </a>
                 </li>
                 <li>
-                  <a href="/acompanhar" className="text-sm text-eu-text hover:text-eu-red transition-colors">
+                  <a href="/acompanhar" className="text-sm text-eu-blue hover:text-eu-red transition-colors">
                     Acompanhar Solicitações
                   </a>
                 </li>

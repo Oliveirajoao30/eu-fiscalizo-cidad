@@ -14,20 +14,20 @@ const Header = () => {
             <Search className="w-8 h-8 text-eu-red" />
             <div className="font-bold text-2xl">
               <span className="text-eu-red">Eu</span>
-              <span className="text-eu-text">Fiscalizo</span>
+              <span className="text-eu-blue">Fiscalizo</span>
             </div>
           </div>
         </Link>
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-6">
-          <Link to="/" className="text-eu-text hover:text-eu-red transition-colors">
+          <Link to="/" className="text-eu-blue hover:text-eu-red transition-colors">
             Início
           </Link>
-          <Link to="/enviar-demanda" className="text-eu-text hover:text-eu-red transition-colors">
+          <Link to="/enviar-demanda" className="text-eu-blue hover:text-eu-red transition-colors">
             Enviar Demanda
           </Link>
-          <Link to="/acompanhar" className="text-eu-text hover:text-eu-red transition-colors">
+          <Link to="/acompanhar" className="text-eu-blue hover:text-eu-red transition-colors">
             Acompanhar Solicitações
           </Link>
           <Link to="/enviar-demanda" className="bg-eu-red text-white font-medium py-2.5 px-5 rounded-md hover:bg-opacity-90 transition-colors">
@@ -37,7 +37,7 @@ const Header = () => {
 
         {/* Mobile Menu Button */}
         <button
-          className="md:hidden text-eu-text"
+          className="md:hidden text-eu-blue"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
         >
           <Menu size={24} />
@@ -50,21 +50,21 @@ const Header = () => {
           <div className="container py-3 flex flex-col">
             <Link
               to="/"
-              className="py-2 text-eu-text hover:text-eu-red transition-colors"
+              className="py-2 text-eu-blue hover:text-eu-red transition-colors"
               onClick={() => setMobileMenuOpen(false)}
             >
               Início
             </Link>
             <Link
               to="/enviar-demanda"
-              className="py-2 text-eu-text hover:text-eu-red transition-colors"
+              className="py-2 text-eu-blue hover:text-eu-red transition-colors"
               onClick={() => setMobileMenuOpen(false)}
             >
               Enviar Demanda
             </Link>
             <Link
               to="/acompanhar"
-              className="py-2 text-eu-text hover:text-eu-red transition-colors"
+              className="py-2 text-eu-blue hover:text-eu-red transition-colors"
               onClick={() => setMobileMenuOpen(false)}
             >
               Acompanhar Solicitações
