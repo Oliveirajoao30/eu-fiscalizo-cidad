@@ -61,7 +61,14 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
-				}
+				},
+				// Eu Fiscalizo custom colors
+				"eu-red": "#FE4A49",
+				"eu-blue": "#2AB7CA",
+				"eu-yellow": "#FED766",
+				"eu-gray-light": "#E6E6EA",
+				"eu-gray-white": "#F4F4F8",
+				"eu-text": "#333333"
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
