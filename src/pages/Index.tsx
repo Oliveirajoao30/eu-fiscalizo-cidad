@@ -10,18 +10,21 @@ const Index = () => {
       <Header />
       <main className="flex-1">
         {/* Hero Section with Background Image */}
-        <section className="relative bg-[url('https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&q=80')] bg-cover bg-center py-24 md:py-32 before:absolute before:inset-0 before:bg-black/50">
-          <div className="container relative z-10">
-            <div className="max-w-2xl mx-auto text-center text-white space-y-6">
-              <h1 className="text-3xl md:text-4xl font-bold">Sua voz na gestão da cidade</h1>
-              <p className="text-base md:text-lg text-white/90">
+        <section className="relative bg-[url('https://images.unsplash.com/photo-1449824913935-59a10b8d2000?auto=format&fit=crop&q=80')] bg-cover bg-center bg-no-repeat h-screen">
+          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/30" />
+          <div className="container relative h-full flex items-center">
+            <div className="max-w-2xl mx-auto text-center text-white space-y-6 mt-16">
+              <h1 className="text-4xl md:text-5xl font-bold leading-tight">
+                Sua voz na gestão da cidade
+              </h1>
+              <p className="text-lg md:text-xl text-white/90">
                 Conectamos os cidadãos à gestão pública para resolver problemas urbanos.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link to="/enviar-demanda" className="bg-eu-red text-white font-medium py-2.5 px-5 rounded-md hover:bg-opacity-90 transition-colors">
+                <Link to="/enviar-demanda" className="bg-eu-red text-white font-medium py-3 px-6 rounded-md hover:bg-opacity-90 transition-colors">
                   Enviar uma demanda
                 </Link>
-                <Link to="/acompanhar" className="bg-white/10 backdrop-blur-sm text-white font-medium py-2.5 px-5 rounded-md hover:bg-white/20 transition-colors">
+                <Link to="/acompanhar" className="bg-white/10 backdrop-blur-sm text-white font-medium py-3 px-6 rounded-md hover:bg-white/20 transition-colors">
                   Acompanhar solicitação
                 </Link>
               </div>

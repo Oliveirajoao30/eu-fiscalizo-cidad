@@ -1,39 +1,42 @@
 
 import { Link } from "react-router-dom";
-import { Menu } from "lucide-react";
+import { Menu, Search } from "lucide-react";
 import { useState } from "react";
 
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <header className="bg-white border-b border-eu-gray-light sticky top-0 z-10">
+    <header className="absolute top-0 left-0 right-0 z-10">
       <div className="container py-4 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2">
-          <div className="text-eu-red font-bold text-2xl">
-            <span className="text-eu-blue">Eu</span> Fiscalizo
+          <div className="flex items-center">
+            <Search className="w-8 h-8 text-eu-red" />
+            <div className="text-white font-bold text-2xl">
+              <span className="text-eu-red">Eu</span> Fiscalizo
+            </div>
           </div>
         </Link>
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-6">
-          <Link to="/" className="text-eu-text hover:text-eu-red transition-colors">
+          <Link to="/" className="text-white hover:text-eu-red transition-colors">
             Início
           </Link>
-          <Link to="/enviar-demanda" className="text-eu-text hover:text-eu-red transition-colors">
+          <Link to="/enviar-demanda" className="text-white hover:text-eu-red transition-colors">
             Enviar Demanda
           </Link>
-          <Link to="/acompanhar" className="text-eu-text hover:text-eu-red transition-colors">
+          <Link to="/acompanhar" className="text-white hover:text-eu-red transition-colors">
             Acompanhar Solicitações
           </Link>
-          <Link to="/enviar-demanda" className="btn-primary">
+          <Link to="/enviar-demanda" className="bg-eu-red text-white font-medium py-2.5 px-5 rounded-md hover:bg-opacity-90 transition-colors">
             Nova Solicitação
           </Link>
         </nav>
 
         {/* Mobile Menu Button */}
         <button
-          className="md:hidden text-eu-text"
+          className="md:hidden text-white"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
         >
           <Menu size={24} />
@@ -42,7 +45,7 @@ const Header = () => {
 
       {/* Mobile Navigation */}
       {mobileMenuOpen && (
-        <nav className="md:hidden bg-white border-t border-eu-gray-light">
+        <nav className="md:hidden bg-white/95 backdrop-blur-sm border-t border-eu-gray-light">
           <div className="container py-3 flex flex-col">
             <Link
               to="/"
