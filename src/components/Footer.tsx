@@ -1,5 +1,5 @@
-
 import { Search } from "lucide-react";
+import Logo3d from "./Logo3d";
 
 const Footer = () => {
   return (
@@ -8,10 +8,9 @@ const Footer = () => {
         <div className="flex flex-col md:flex-row justify-between items-center">
           <div className="flex flex-col items-center md:items-start mb-4 md:mb-0">
             <div className="flex items-center gap-2">
-              <Search className="w-6 h-6 text-eu-red" />
-              <div className="font-bold text-xl">
-                <span className="text-eu-red">Eu</span>
-                <span className="text-eu-blue">Fiscalizo</span>
+              <Logo3d size={24} />
+              <div className="font-bold text-xl text-black">
+                Eu <span className="text-black">Fiscalizo</span>
               </div>
             </div>
             <p className="text-sm text-eu-text mt-2">

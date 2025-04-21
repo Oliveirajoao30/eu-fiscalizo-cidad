@@ -8,9 +8,9 @@ const Index = () => {
     <div className="min-h-screen flex flex-col">
       <Header />
       <main className="flex-1">
-        {/* Hero Section with Background Image */}
-        <section className="relative bg-[url('https://images.unsplash.com/photo-1449824913935-59a10b8d2000?auto=format&fit=crop&q=80')] bg-cover bg-center bg-no-repeat h-screen">
-          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/30" />
+        {/* Hero Section with New Background Image */}
+        <section className="relative bg-[url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1600&q=90')] bg-cover bg-center bg-no-repeat h-screen">
+          <div className="absolute inset-0 bg-gradient-to-b from-white/80 via-black/50 to-black/80" />
           <div className="container relative h-full flex items-center">
             <div className="max-w-2xl mx-auto text-center text-white space-y-6 mt-16">
               <h1 className="text-4xl md:text-5xl font-bold leading-tight">
@@ -20,10 +20,10 @@ const Index = () => {
                 Conectamos os cidadãos à gestão pública para resolver problemas urbanos.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link to="/enviar-demanda" className="bg-eu-red text-white font-medium py-3 px-6 rounded-md hover:bg-opacity-90 transition-colors">
+                <Link to="/enviar-demanda" className="bg-black text-white font-medium py-3 px-6 rounded-md hover:bg-gray-900 transition-colors">
                   Enviar uma demanda
                 </Link>
-                <Link to="/acompanhar" className="bg-white/10 backdrop-blur-sm text-white font-medium py-3 px-6 rounded-md hover:bg-white/20 transition-colors">
+                <Link to="/acompanhar" className="bg-white/20 text-white font-medium py-3 px-6 rounded-md hover:bg-white/30 transition-colors">
                   Acompanhar solicitação
                 </Link>
               </div>
