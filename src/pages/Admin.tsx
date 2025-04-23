@@ -34,6 +34,7 @@ import Footer from "@/components/Footer";
 import { Search, Filter, Eye, Edit, Trash2, Send } from "lucide-react";
 import AdminDemandaDetails from "@/components/AdminDemandaDetails";
 import { useToast } from "@/hooks/use-toast";
+import { demandasExemplo } from "@/data/demandas";
 
 const Admin = () => {
   const { user } = useAuth();
@@ -87,10 +88,9 @@ const Admin = () => {
       setIsLoading(true);
       try {
         // In a real app, you would fetch data from Supabase
-        // For demo purposes, we'll import mock data
-        const { demandas } = await import("@/data/demandas");
-        setDemandas(demandas);
-        setFilteredDemandas(demandas);
+        // For demo purposes, we'll use mock data
+        setDemandas(demandasExemplo);
+        setFilteredDemandas(demandasExemplo);
       } catch (error) {
         console.error("Error fetching demandas:", error);
         toast({
