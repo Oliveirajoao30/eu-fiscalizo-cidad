@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -82,24 +81,21 @@ const Login = () => {
 
   return (
     <div className="flex min-h-screen">
-      {/* Background Image */}
       <div 
         className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat"
         style={{ 
-          backgroundImage: "url('public/lovable-uploads/23dcffb3-ff73-41d8-87c5-e0fd0d561c09.png')",
-          filter: "blur(8px)",
+          backgroundImage: "url('/lovable-uploads/25459f73-8e47-433d-9375-dcc1fb8191a8.png')",
+          filter: "blur(16px) brightness(0.8)",
         }}
       />
       
-      {/* Overlay */}
       <div className="fixed inset-0 z-0 bg-black bg-opacity-40" />
       
-      {/* Content */}
       <div className="flex min-h-screen w-full items-center justify-center relative z-10">
-        <div className="w-full max-w-md bg-white bg-opacity-95 backdrop-blur-sm shadow-xl rounded-xl p-8 space-y-6">
+        <div className="w-full max-w-md bg-white bg-opacity-95 backdrop-blur-md shadow-xl rounded-xl p-8 space-y-6">
           <div className="flex flex-col items-center justify-center mb-6">
             <Logo3d size={48} />
-            <h1 className="text-2xl font-bold text-black mt-3">Eu Fiscalizo</h1>
+            <h1 className="text-2xl font-bold text-black mt-3 tracking-tight">Eu Fiscalizo</h1>
             <p className="text-sm text-gray-600">Sua voz na gestão da cidade</p>
           </div>
           

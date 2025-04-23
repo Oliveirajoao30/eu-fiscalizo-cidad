@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
@@ -35,6 +34,7 @@ import { Search, Filter, Eye, Edit, Trash2, Send } from "lucide-react";
 import AdminDemandaDetails from "@/components/AdminDemandaDetails";
 import { useToast } from "@/hooks/use-toast";
 import { demandasExemplo } from "@/data/demandas";
+import Logo3d from "@/components/Logo3d";
 
 const Admin = () => {
   const { user } = useAuth();
@@ -48,22 +48,23 @@ const Admin = () => {
   const [selectedDemanda, setSelectedDemanda] = useState<Demanda | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
 
-  // Check if user is admin
+  // NEW: Check user is admin via Supabase user_roles
   useEffect(() => {
-    const checkAdminStatus = async () => {
+    async function checkAdmin() {
       if (!user) {
         navigate("/login");
         return;
       }
-
       try {
-        // In a real app, you would check admin status from Supabase
-        // For now, we'll use a simple check - in production you would 
-        // replace this with a proper RLS policy check or a database query
-        const isUserAdmin = true; // Placeholder for actual admin check
-        setIsAdmin(isUserAdmin);
-
-        if (!isUserAdmin) {
+        const { data, error } = await supabase
+          .from("user_roles")
+          .select("role")
+          .eq("user_id", user.id)
+          .single();
+        if (!error && data && data.role === "admin") {
+          setIsAdmin(true);
+        } else {
+          setIsAdmin(false);
           navigate("/");
           toast({
             title: "Acesso negado",
@@ -72,12 +73,12 @@ const Admin = () => {
           });
         }
       } catch (error) {
-        console.error("Error checking admin status:", error);
+        setIsAdmin(false);
         navigate("/");
       }
-    };
-
-    checkAdminStatus();
+    }
+    checkAdmin();
+    // eslint-disable-next-line
   }, [user, navigate, toast]);
 
   // Fetch demandas
@@ -207,8 +208,13 @@ const Admin = () => {
     <div className="min-h-screen flex flex-col bg-eu-gray-white">
       <Header />
       <main className="flex-1 container py-8">
-        <h1 className="text-3xl font-bold mb-2 text-black">Painel de Administração</h1>
-        <p className="text-gray-600 mb-8">Gerencie todas as solicitações dos cidadãos</p>
+        {/* Separated Branding/Header section */}
+        <div className="flex flex-col items-center mb-8">
+          <Logo3d size={44} />
+          <span className="font-bold text-2xl text-black mt-1 tracking-tight">Eu Fiscalizo</span>
+        </div>
+        <h1 className="text-3xl font-bold mb-2 text-black text-center">Painel de Administração</h1>
+        <p className="text-gray-600 mb-8 text-center">Gerencie todas as solicitações dos cidadãos</p>
         
         {/* Filters and Search */}
         <div className="flex flex-col md:flex-row gap-4 mb-6">
@@ -242,11 +248,11 @@ const Admin = () => {
                 </SelectContent>
               </Select>
             </div>
-            
             <Button className="bg-black text-white">Nova Demanda</Button>
           </div>
         </div>
         
+        {/* Two column layout */}
         <div className="flex flex-col md:flex-row gap-6">
           {/* Table of demandas */}
           <Card className="w-full md:w-7/12 bg-white shadow-md">

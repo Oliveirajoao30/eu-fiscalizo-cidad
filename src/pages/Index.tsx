@@ -9,8 +9,8 @@ const Index = () => {
     <div className="min-h-screen flex flex-col">
       <Header />
       <main className="flex-1">
-        {/* Hero Section with New City Background Image */}
-        <section className="relative bg-[url('public/lovable-uploads/017062cd-bc6f-4e2e-a042-ca7fa6fcf595.png')] bg-cover bg-center bg-no-repeat h-screen">
+        {/* Hero Section with City Image */}
+        <section className="relative bg-[url('/lovable-uploads/92047096-a90a-4070-b17b-932a46619365.png')] bg-cover bg-center bg-no-repeat h-screen">
           <div className="absolute inset-0 bg-gradient-to-b from-white/80 via-black/50 to-black/80" />
           <div className="container relative h-full flex items-center">
             <div className="max-w-2xl mx-auto text-center text-white space-y-6 mt-16">
