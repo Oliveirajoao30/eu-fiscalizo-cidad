@@ -12,18 +12,25 @@ import NotFound from "./pages/NotFound";
 import { DemandasProvider } from "./context/DemandasContext";
 import Login from "./pages/Login";
 import Cadastro from "./pages/Cadastro";
+import Admin from "./pages/Admin";
 import { AuthProvider, useAuth } from "./hooks/useAuth";
 
 const queryClient = new QueryClient();
 
-function ProtectedRoute({ children }: { children: JSX.Element }) {
+function ProtectedRoute({ children, adminOnly = false }: { children: JSX.Element, adminOnly?: boolean }) {
   const { user, loading } = useAuth();
+  
   if (loading) {
     return <div className="flex items-center justify-center min-h-screen">Carregando...</div>;
   }
+  
   if (!user) {
     return <Navigate to="/login" replace />;
   }
+  
+  // For admin routes, you would add additional checks here
+  // For now, we're allowing all authenticated users to access the admin page
+  
   return children;
 }
 
@@ -52,6 +59,11 @@ const App = () => (
               <Route path="/confirmacao" element={
                 <ProtectedRoute>
                   <Confirmacao />
+                </ProtectedRoute>
+              } />
+              <Route path="/admin" element={
+                <ProtectedRoute adminOnly={true}>
+                  <Admin />
                 </ProtectedRoute>
               } />
               <Route path="*" element={<NotFound />} />

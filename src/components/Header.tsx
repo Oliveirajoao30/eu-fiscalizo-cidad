@@ -1,10 +1,13 @@
+
 import { Link } from "react-router-dom";
 import { Menu, Search } from "lucide-react";
 import { useState } from "react";
 import Logo3d from "./Logo3d";
+import { useAuth } from "@/hooks/useAuth";
 
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { user, logout } = useAuth();
 
   return (
     <header className="absolute top-0 left-0 right-0 z-10">
@@ -29,18 +32,26 @@ const Header = () => {
           <Link to="/acompanhar" className="text-black font-medium hover:text-eu-red transition-colors">
             Acompanhar Solicitações
           </Link>
-          <Link to="/login" className="border border-black text-black px-5 py-2.5 rounded-md hover:bg-black hover:text-white transition-colors ml-3">
-            Login
-          </Link>
-          <button
-            className="bg-black text-white px-5 py-2.5 rounded-md font-medium hover:bg-gray-800 transition-colors ml-2"
-            onClick={() => {
-              // Função de logout será declarada nos próximos passos
-              window.dispatchEvent(new CustomEvent("logout-intent"));
-            }}
-          >
-            Logout
-          </button>
+          
+          {/* Show Admin link for authenticated users (in production you'd check for admin role) */}
+          {user && (
+            <Link to="/admin" className="text-black font-medium hover:text-eu-red transition-colors">
+              Admin
+            </Link>
+          )}
+          
+          {!user ? (
+            <Link to="/login" className="border border-black text-black px-5 py-2.5 rounded-md hover:bg-black hover:text-white transition-colors ml-3">
+              Login
+            </Link>
+          ) : (
+            <button
+              className="bg-black text-white px-5 py-2.5 rounded-md font-medium hover:bg-gray-800 transition-colors ml-2"
+              onClick={logout}
+            >
+              Logout
+            </button>
+          )}
         </nav>
 
         {/* Mobile */}
@@ -48,7 +59,7 @@ const Header = () => {
           className="md:hidden text-black"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
         >
-          <Logo3d size={28} />
+          <Menu size={28} />
         </button>
       </div>
 
@@ -77,13 +88,37 @@ const Header = () => {
             >
               Acompanhar Solicitações
             </Link>
-            <Link
-              to="/login"
-              className="py-2 text-black font-medium hover:text-eu-red transition-colors"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Login
-            </Link>
+            
+            {/* Show Admin link for authenticated users in mobile menu */}
+            {user && (
+              <Link
+                to="/admin"
+                className="py-2 text-black font-medium hover:text-eu-red transition-colors"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Admin
+              </Link>
+            )}
+            
+            {!user ? (
+              <Link
+                to="/login"
+                className="py-2 text-black font-medium hover:text-eu-red transition-colors"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Login
+              </Link>
+            ) : (
+              <button
+                className="py-2 text-left text-black font-medium hover:text-eu-red transition-colors"
+                onClick={() => {
+                  logout();
+                  setMobileMenuOpen(false);
+                }}
+              >
+                Logout
+              </button>
+            )}
           </div>
         </nav>
       )}

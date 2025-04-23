@@ -10,7 +10,7 @@ const Index = () => {
       <Header />
       <main className="flex-1">
         {/* Hero Section with New City Background Image */}
-        <section className="relative bg-[url('public/lovable-uploads/1a76d159-077d-499a-a44d-8bccedf5e3c3.png')] bg-cover bg-center bg-no-repeat h-screen">
+        <section className="relative bg-[url('public/lovable-uploads/017062cd-bc6f-4e2e-a042-ca7fa6fcf595.png')] bg-cover bg-center bg-no-repeat h-screen">
           <div className="absolute inset-0 bg-gradient-to-b from-white/80 via-black/50 to-black/80" />
           <div className="container relative h-full flex items-center">
             <div className="max-w-2xl mx-auto text-center text-white space-y-6 mt-16">

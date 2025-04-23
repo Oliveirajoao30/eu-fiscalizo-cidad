@@ -86,7 +86,7 @@ const Login = () => {
       <div 
         className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat"
         style={{ 
-          backgroundImage: "url('public/lovable-uploads/59940332-a27a-4f8d-b77b-b0f7f16a1507.png')",
+          backgroundImage: "url('public/lovable-uploads/23dcffb3-ff73-41d8-87c5-e0fd0d561c09.png')",
           filter: "blur(8px)",
         }}
       />
