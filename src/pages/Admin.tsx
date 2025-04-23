@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
@@ -48,20 +49,36 @@ const Admin = () => {
   const [selectedDemanda, setSelectedDemanda] = useState<Demanda | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
 
-  // NEW: Check user is admin via Supabase user_roles
+  // Check user is admin via Supabase user_roles
   useEffect(() => {
     async function checkAdmin() {
       if (!user) {
         navigate("/login");
         return;
       }
+      
       try {
+        // Query the user_roles table to check if user has admin role
         const { data, error } = await supabase
-          .from("user_roles")
-          .select("role")
-          .eq("user_id", user.id)
+          .from('user_roles')
+          .select('role')
+          .eq('user_id', user.id)
+          .eq('role', 'admin')
           .single();
-        if (!error && data && data.role === "admin") {
+        
+        if (error) {
+          console.error("Error checking admin role:", error);
+          setIsAdmin(false);
+          navigate("/");
+          toast({
+            title: "Acesso negado",
+            description: "Você não tem permissão para acessar esta página.",
+            variant: "destructive"
+          });
+          return;
+        }
+        
+        if (data) {
           setIsAdmin(true);
         } else {
           setIsAdmin(false);
@@ -73,12 +90,13 @@ const Admin = () => {
           });
         }
       } catch (error) {
+        console.error("Error in admin check:", error);
         setIsAdmin(false);
         navigate("/");
       }
     }
+    
     checkAdmin();
-    // eslint-disable-next-line
   }, [user, navigate, toast]);
 
   // Fetch demandas
@@ -208,13 +226,17 @@ const Admin = () => {
     <div className="min-h-screen flex flex-col bg-eu-gray-white">
       <Header />
       <main className="flex-1 container py-8">
-        {/* Separated Branding/Header section */}
-        <div className="flex flex-col items-center mb-8">
+        {/* Branding section above the admin panel heading */}
+        <div className="flex flex-col items-center mb-6">
           <Logo3d size={44} />
           <span className="font-bold text-2xl text-black mt-1 tracking-tight">Eu Fiscalizo</span>
         </div>
-        <h1 className="text-3xl font-bold mb-2 text-black text-center">Painel de Administração</h1>
-        <p className="text-gray-600 mb-8 text-center">Gerencie todas as solicitações dos cidadãos</p>
+
+        {/* Admin panel heading in its own section */}
+        <div className="text-center mb-8">  
+          <h1 className="text-3xl font-bold text-black">Painel de Administração</h1>
+          <p className="text-gray-600 mt-2">Gerencie todas as solicitações dos cidadãos</p>
+        </div>
         
         {/* Filters and Search */}
         <div className="flex flex-col md:flex-row gap-4 mb-6">
