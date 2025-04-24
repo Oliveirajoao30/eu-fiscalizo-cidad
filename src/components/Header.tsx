@@ -1,4 +1,3 @@
-
 import { Link } from "react-router-dom";
 import { Menu, Search } from "lucide-react";
 import { useState } from "react";
@@ -11,9 +10,9 @@ const Header = () => {
 
   return (
     <header className="absolute top-0 left-0 right-0 z-10">
-      <div className="container py-4 flex items-center justify-between">
-        <Link to="/" className="flex items-center gap-2">
-          <div className="flex items-center">
+      <div className="container py-6 flex items-center justify-between">
+        <Link to="/" className="flex items-center gap-3">
+          <div className="flex items-center gap-3">
             <Logo3d size={34} />
             <div className="font-bold text-2xl text-black">
               Eu <span className="text-black">Fiscalizo</span>
@@ -22,7 +21,7 @@ const Header = () => {
         </Link>
 
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center gap-6">
+        <nav className="hidden md:flex items-center gap-8">
           <Link to="/" className="text-black font-medium hover:text-eu-red transition-colors">
             Início
           </Link>
@@ -41,12 +40,12 @@ const Header = () => {
           )}
           
           {!user ? (
-            <Link to="/login" className="border border-black text-black px-5 py-2.5 rounded-md hover:bg-black hover:text-white transition-colors ml-3">
+            <Link to="/login" className="border border-black text-black px-5 py-2.5 rounded-md hover:bg-black hover:text-white transition-colors ml-4">
               Login
             </Link>
           ) : (
             <button
-              className="bg-black text-white px-5 py-2.5 rounded-md font-medium hover:bg-gray-800 transition-colors ml-2"
+              className="bg-black text-white px-5 py-2.5 rounded-md font-medium hover:bg-gray-800 transition-colors ml-4"
               onClick={logout}
             >
               Logout

@@ -84,12 +84,12 @@ const Login = () => {
       <div 
         className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat transition-all duration-500"
         style={{ 
-          backgroundImage: "url('https://images.unsplash.com/photo-1545163143-47176c914d1b?q=80&w=2070')",
+          backgroundImage: "url('https://images.unsplash.com/photo-1500375592092-40eb2168fd21?q=80&w=2070')",
           filter: "blur(8px) brightness(0.9)",
         }}
       />
       
-      <div className="fixed inset-0 z-0 bg-gradient-to-b from-black/30 via-black/50 to-black/70" />
+      <div className="fixed inset-0 z-0 bg-gradient-to-b from-white/5 via-black/50 to-black/80" />
       
       <div className="flex min-h-screen w-full items-center justify-center relative z-10">
         <div className="w-full max-w-md bg-white/95 backdrop-blur-sm shadow-xl rounded-xl p-8 space-y-6">
