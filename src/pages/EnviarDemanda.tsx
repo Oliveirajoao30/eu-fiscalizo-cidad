@@ -1,10 +1,10 @@
-
 import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { categorias } from "../data/categorias";
 import { useDemandas } from "../context/DemandasContext";
+import LocationMap from "../components/LocationMap";
 
 const EnviarDemanda = () => {
   const [searchParams] = useSearchParams();
@@ -21,6 +21,8 @@ const EnviarDemanda = () => {
     cidade: "",
     estado: "",
     complemento: "",
+    latitude: 0,
+    longitude: 0,
   });
 
   const [enviando, setEnviando] = useState(false);
@@ -32,12 +34,26 @@ const EnviarDemanda = () => {
     if (erro) setErro("");
   };
 
+  const handleLocationSelect = (location: {
+    latitude: number;
+    longitude: number;
+    address?: string;
+    bairro?: string;
+  }) => {
+    setFormState(prev => ({
+      ...prev,
+      latitude: location.latitude,
+      longitude: location.longitude,
+      ...(location.address && { endereco: location.address }),
+      ...(location.bairro && { bairro: location.bairro }),
+    }));
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setEnviando(true);
     setErro("");
 
-    // Validação simples
     if (!formState.titulo || !formState.categoria || !formState.descricao || !formState.endereco || !formState.bairro || !formState.cidade || !formState.estado) {
       setErro("Por favor, preencha todos os campos obrigatórios.");
       setEnviando(false);
@@ -54,11 +70,12 @@ const EnviarDemanda = () => {
           bairro: formState.bairro,
           cidade: formState.cidade,
           estado: formState.estado,
-          complemento: formState.complemento
+          complemento: formState.complemento,
+          latitude: formState.latitude,
+          longitude: formState.longitude,
         }
       });
 
-      // Simula um delay para mostrar o estado de "enviando"
       setTimeout(() => {
         navigate(`/confirmacao?protocolo=${protocolo}`);
       }, 1000);
@@ -142,6 +159,11 @@ const EnviarDemanda = () => {
               <div className="border-t border-eu-gray-light pt-6">
                 <h2 className="text-xl font-medium text-eu-text mb-4">Localização</h2>
                 
+                <LocationMap
+                  onLocationSelect={handleLocationSelect}
+                  className="mb-6"
+                />
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label htmlFor="endereco" className="block text-eu-text font-medium mb-2">

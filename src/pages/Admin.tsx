@@ -46,14 +46,15 @@ const Admin = () => {
   const [statusFilter, setStatusFilter] = useState<StatusDemanda | "todas">("todas");
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedDemanda, setSelectedDemanda] = useState<Demanda | null>(null);
-  // Remove isAdmin state as we don't need this restriction anymore
-  
-  // Fetch demandas without admin check
+
+  const handleNewDemanda = () => {
+    navigate('/enviar-demanda');
+  };
+
   useEffect(() => {
     const fetchDemandas = async () => {
       setIsLoading(true);
       try {
-        // For demo purposes, we'll use mock data
         setDemandas(demandasExemplo);
         setFilteredDemandas(demandasExemplo);
       } catch (error) {
@@ -71,16 +72,13 @@ const Admin = () => {
     fetchDemandas();
   }, [toast]);
 
-  // Keep existing filter effect
   useEffect(() => {
     let filtered = [...demandas];
     
-    // Filter by status
     if (statusFilter !== "todas") {
       filtered = filtered.filter(demanda => demanda.status === statusFilter);
     }
     
-    // Filter by search term
     if (searchTerm) {
       const term = searchTerm.toLowerCase();
       filtered = filtered.filter(demanda => 
@@ -94,11 +92,8 @@ const Admin = () => {
     setFilteredDemandas(filtered);
   }, [demandas, statusFilter, searchTerm]);
 
-  // Update demanda status
   const updateDemandaStatus = async (id: string, newStatus: StatusDemanda) => {
     try {
-      // In a real app, you would update the status in Supabase
-      // For demo purposes, we'll update it locally
       const updatedDemandas = demandas.map(demanda => {
         if (demanda.id === id) {
           return {
@@ -117,7 +112,6 @@ const Admin = () => {
         description: `Demanda ${id} atualizada para ${newStatus}.`
       });
       
-      // If the currently selected demanda was updated, update it in the details view
       if (selectedDemanda && selectedDemanda.id === id) {
         setSelectedDemanda({
           ...selectedDemanda,
@@ -135,17 +129,13 @@ const Admin = () => {
     }
   };
 
-  // Delete demanda
   const deleteDemanda = async (id: string) => {
     if (!confirm("Tem certeza que deseja excluir esta demanda?")) return;
 
     try {
-      // In a real app, you would delete the demanda from Supabase
-      // For demo purposes, we'll delete it locally
       const updatedDemandas = demandas.filter(demanda => demanda.id !== id);
       setDemandas(updatedDemandas);
       
-      // If the currently selected demanda was deleted, close the details view
       if (selectedDemanda && selectedDemanda.id === id) {
         setSelectedDemanda(null);
       }
@@ -168,19 +158,16 @@ const Admin = () => {
     <div className="min-h-screen flex flex-col bg-eu-gray-white">
       <Header />
       <main className="flex-1 container py-24">
-        {/* Branding section above the admin panel heading */}
         <div className="flex flex-col items-center mb-6">
           <Logo3d size={44} />
           <span className="font-bold text-2xl text-black mt-1 tracking-tight">Eu Fiscalizo</span>
         </div>
 
-        {/* Admin panel heading in its own section */}
         <div className="text-center mb-8">  
           <h1 className="text-3xl font-bold text-black">Painel de Administração</h1>
           <p className="text-gray-600 mt-2">Gerencie todas as solicitações dos cidadãos</p>
         </div>
         
-        {/* Filters and Search */}
         <div className="flex flex-col md:flex-row gap-4 mb-6">
           <div className="flex items-center bg-white rounded-lg px-3 py-2 shadow-sm border border-eu-gray-light flex-1">
             <Search className="h-5 w-5 text-gray-400" />
@@ -212,13 +199,11 @@ const Admin = () => {
                 </SelectContent>
               </Select>
             </div>
-            <Button className="bg-black text-white">Nova Demanda</Button>
+            <Button className="bg-black text-white" onClick={handleNewDemanda}>Nova Demanda</Button>
           </div>
         </div>
         
-        {/* Two column layout */}
         <div className="flex flex-col md:flex-row gap-6">
-          {/* Table of demandas */}
           <Card className="w-full md:w-7/12 bg-white shadow-md">
             <CardHeader className="pb-3">
               <CardTitle>Solicitações ({filteredDemandas.length})</CardTitle>
@@ -303,7 +288,6 @@ const Admin = () => {
             </CardContent>
           </Card>
 
-          {/* Details panel */}
           <Card className="w-full md:w-5/12 bg-white shadow-md">
             {selectedDemanda ? (
               <>
