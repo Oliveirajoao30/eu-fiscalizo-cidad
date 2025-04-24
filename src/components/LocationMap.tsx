@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { Map, MapPin } from 'lucide-react';
+import { MapPin } from 'lucide-react';
 import { Button } from './ui/button';
 import { useToast } from '@/hooks/use-toast';
 import mapboxgl from 'mapbox-gl';
@@ -12,68 +12,178 @@ interface LocationMapProps {
     longitude: number;
     address?: string;
     bairro?: string;
+    cidade?: string;
+    estado?: string;
+    complemento?: string;
   }) => void;
   className?: string;
 }
+
+// Configuração para usar OpenStreetMap como fallback caso o Mapbox falhe
+const useOpenStreetMap = true; // Ativar OpenStreetMap por padrão (não requer API key)
 
 const LocationMap: React.FC<LocationMapProps> = ({ onLocationSelect, className }) => {
   const [map, setMap] = useState<mapboxgl.Map | null>(null);
   const [marker, setMarker] = useState<mapboxgl.Marker | null>(null);
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
+  const [mapContainer, setMapContainer] = useState<HTMLDivElement | null>(null);
 
-  const initializeMap = useCallback((latitude: number, longitude: number) => {
-    if (!mapboxgl.accessToken) {
-      // For demo purposes, using a temporary token. In production, this should be stored in environment variables
-      mapboxgl.accessToken = 'pk.eyJ1IjoibG92YWJsZSIsImEiOiJjbHNqd2F2NW0wMXUyMnFxbzB5ZnB3a2d2In0.JDk4cfZAwOSAOGKs1tCkbg';
+  // Função para inicializar o mapa com OpenStreetMap (não requer API key)
+  const initializeLeafletMap = useCallback((latitude: number, longitude: number) => {
+    if (!mapContainer) return;
+
+    // Limpeza de mapas anteriores
+    if (mapContainer.innerHTML) {
+      mapContainer.innerHTML = '';
     }
 
-    const mapInstance = new mapboxgl.Map({
-      container: 'map',
-      style: 'mapbox://styles/mapbox/streets-v12',
-      center: [longitude, latitude],
-      zoom: 15,
+    // Carrega Leaflet de CDN
+    const loadLeaflet = async () => {
+      if (!window.L) {
+        const cssLink = document.createElement('link');
+        cssLink.rel = 'stylesheet';
+        cssLink.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+        document.head.appendChild(cssLink);
+
+        const script = document.createElement('script');
+        script.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+        script.integrity = 'sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=';
+        script.crossOrigin = '';
+        
+        document.body.appendChild(script);
+        
+        return new Promise<void>((resolve) => {
+          script.onload = () => resolve();
+        });
+      }
+      return Promise.resolve();
+    };
+
+    loadLeaflet().then(() => {
+      // @ts-ignore - Leaflet será carregado dinamicamente
+      const L = window.L;
+      
+      const mapInstance = L.map(mapContainer).setView([latitude, longitude], 15);
+      
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      }).addTo(mapInstance);
+      
+      const markerInstance = L.marker([latitude, longitude], { draggable: true }).addTo(mapInstance);
+      
+      markerInstance.on('dragend', () => {
+        const position = markerInstance.getLatLng();
+        updateLocation(position.lat, position.lng);
+      });
+      
+      mapInstance.on('click', (e: any) => {
+        markerInstance.setLatLng(e.latlng);
+        updateLocation(e.latlng.lat, e.latlng.lng);
+      });
+      
+      // Guarda referências para controle
+      setMap(mapInstance as any);
+      setMarker(markerInstance as any);
     });
+  }, [mapContainer]);
 
-    const markerInstance = new mapboxgl.Marker({
-      draggable: true,
-      color: '#000000',
-    })
-      .setLngLat([longitude, latitude])
-      .addTo(mapInstance);
+  const initializeMapboxMap = useCallback((latitude: number, longitude: number) => {
+    if (!mapContainer) return;
 
-    markerInstance.on('dragend', () => {
-      const lngLat = markerInstance.getLngLat();
-      updateLocation(lngLat.lat, lngLat.lng);
-    });
+    try {
+      // Para ambiente de produção, use uma variável de ambiente
+      mapboxgl.accessToken = 'pk.eyJ1IjoiZXVjaWRhZGVtYXBhIiwiYSI6ImNsc3Jya3E0dDA3a3AybHBnZ2NlNjRjOGcifQ.Ko1YS--4LZFgVMwjLBIPpQ';
+      
+      const mapInstance = new mapboxgl.Map({
+        container: mapContainer,
+        style: 'mapbox://styles/mapbox/streets-v12',
+        center: [longitude, latitude],
+        zoom: 15,
+      });
 
-    mapInstance.addControl(new mapboxgl.NavigationControl(), 'top-right');
+      const markerInstance = new mapboxgl.Marker({
+        draggable: true,
+        color: '#000000',
+      })
+        .setLngLat([longitude, latitude])
+        .addTo(mapInstance);
 
-    setMap(mapInstance);
-    setMarker(markerInstance);
-  }, []);
+      markerInstance.on('dragend', () => {
+        const lngLat = markerInstance.getLngLat();
+        updateLocation(lngLat.lat, lngLat.lng);
+      });
+
+      mapInstance.on('click', (e) => {
+        markerInstance.setLngLat(e.lngLat);
+        updateLocation(e.lngLat.lat, e.lngLat.lng);
+      });
+
+      mapInstance.addControl(new mapboxgl.NavigationControl(), 'top-right');
+
+      setMap(mapInstance);
+      setMarker(markerInstance);
+    } catch (error) {
+      console.error('Erro ao inicializar Mapbox, usando OpenStreetMap como fallback', error);
+      initializeLeafletMap(latitude, longitude);
+    }
+  }, [mapContainer, initializeLeafletMap]);
+
+  // Função para inicializar o mapa apropriado
+  const initializeMap = useCallback((latitude: number, longitude: number) => {
+    if (useOpenStreetMap) {
+      initializeLeafletMap(latitude, longitude);
+    } else {
+      initializeMapboxMap(latitude, longitude);
+    }
+  }, [initializeLeafletMap, initializeMapboxMap]);
 
   const updateLocation = useCallback(async (latitude: number, longitude: number) => {
     try {
-      // Reverse geocoding using Mapbox
+      // Utiliza Nominatim (OpenStreetMap) para geocodificação reversa - não requer API key
       const response = await fetch(
-        `https://api.mapbox.com/geocoding/v5/mapbox.places/${longitude},${latitude}.json?access_token=${mapboxgl.accessToken}`
+        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&addressdetails=1`
       );
       const data = await response.json();
       
-      if (data.features && data.features.length > 0) {
-        const address = data.features[0].place_name;
-        const bairro = data.features.find((f: any) => f.place_type.includes('neighborhood'))?.text;
+      if (data && data.address) {
+        const address = data.display_name;
+        const bairro = data.address.suburb || data.address.neighbourhood || data.address.district || '';
+        const cidade = data.address.city || data.address.town || data.address.village || '';
+        const estado = data.address.state || '';
+        const rua = data.address.road || '';
+        const numero = data.address.house_number || '';
+        const complemento = '';
         
-        onLocationSelect({ latitude, longitude, address, bairro });
+        const endereco = rua + (numero ? `, ${numero}` : '');
+        
+        onLocationSelect({ 
+          latitude, 
+          longitude, 
+          address: endereco || address, 
+          bairro, 
+          cidade, 
+          estado,
+          complemento 
+        });
+        
+        toast({
+          title: "Localização atualizada",
+          description: "Os dados de endereço foram preenchidos automaticamente",
+        });
       } else {
         onLocationSelect({ latitude, longitude });
       }
     } catch (error) {
-      console.error('Error fetching address:', error);
+      console.error('Erro ao obter endereço:', error);
       onLocationSelect({ latitude, longitude });
+      toast({
+        title: "Não foi possível obter o endereço completo",
+        description: "Por favor, preencha os campos manualmente",
+        variant: "destructive",
+      });
     }
-  }, [onLocationSelect]);
+  }, [onLocationSelect, toast]);
 
   const getCurrentLocation = useCallback(() => {
     setLoading(true);
@@ -81,9 +191,17 @@ const LocationMap: React.FC<LocationMapProps> = ({ onLocationSelect, className }
       (position) => {
         const { latitude, longitude } = position.coords;
         
-        if (map && marker) {
-          map.flyTo({ center: [longitude, latitude], zoom: 15 });
-          marker.setLngLat([longitude, latitude]);
+        if (map) {
+          if (useOpenStreetMap) {
+            // @ts-ignore - leaflet tem API diferente
+            map.setView([latitude, longitude], 15);
+            // @ts-ignore - leaflet tem API diferente
+            marker?.setLatLng([latitude, longitude]);
+          } else {
+            // Mapbox
+            map.flyTo({ center: [longitude, latitude], zoom: 15 });
+            marker?.setLngLat([longitude, latitude]);
+          }
         } else {
           initializeMap(latitude, longitude);
         }
@@ -92,14 +210,14 @@ const LocationMap: React.FC<LocationMapProps> = ({ onLocationSelect, className }
         setLoading(false);
       },
       (error) => {
-        console.error('Error getting location:', error);
+        console.error('Erro ao obter localização:', error);
         toast({
           title: "Erro ao obter localização",
           description: "Por favor, permita o acesso à sua localização ou selecione manualmente no mapa.",
           variant: "destructive",
         });
-        // Default to city center coordinates if geolocation fails
-        initializeMap(-22.9068, -43.1729); // Rio de Janeiro coordinates
+        // Default to Rio de Janeiro coordinates if geolocation fails
+        initializeMap(-22.9068, -43.1729);
         setLoading(false);
       },
       { enableHighAccuracy: true }
@@ -125,6 +243,7 @@ const LocationMap: React.FC<LocationMapProps> = ({ onLocationSelect, className }
         </Button>
       </div>
       <div 
+        ref={setMapContainer}
         id="map" 
         className="w-full h-[300px] rounded-lg border border-gray-200 shadow-sm"
       />

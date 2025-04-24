@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import Header from "../components/Header";
@@ -5,12 +6,14 @@ import Footer from "../components/Footer";
 import { categorias } from "../data/categorias";
 import { useDemandas } from "../context/DemandasContext";
 import LocationMap from "../components/LocationMap";
+import { useToast } from "@/hooks/use-toast";
 
 const EnviarDemanda = () => {
   const [searchParams] = useSearchParams();
   const categoriaParam = searchParams.get("categoria");
   const navigate = useNavigate();
   const { adicionarDemanda } = useDemandas();
+  const { toast } = useToast();
 
   const [formState, setFormState] = useState({
     titulo: "",
@@ -39,6 +42,9 @@ const EnviarDemanda = () => {
     longitude: number;
     address?: string;
     bairro?: string;
+    cidade?: string;
+    estado?: string;
+    complemento?: string;
   }) => {
     setFormState(prev => ({
       ...prev,
@@ -46,6 +52,9 @@ const EnviarDemanda = () => {
       longitude: location.longitude,
       ...(location.address && { endereco: location.address }),
       ...(location.bairro && { bairro: location.bairro }),
+      ...(location.cidade && { cidade: location.cidade }),
+      ...(location.estado && { estado: location.estado }),
+      ...(location.complemento && { complemento: location.complemento }),
     }));
   };
 
@@ -74,6 +83,11 @@ const EnviarDemanda = () => {
           latitude: formState.latitude,
           longitude: formState.longitude,
         }
+      });
+
+      toast({
+        title: "Demanda enviada com sucesso!",
+        description: `Seu protocolo é: ${protocolo}`,
       });
 
       setTimeout(() => {
