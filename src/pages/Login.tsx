@@ -82,17 +82,17 @@ const Login = () => {
   return (
     <div className="flex min-h-screen">
       <div 
-        className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat"
+        className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat transition-all duration-500"
         style={{ 
-          backgroundImage: "url('/lovable-uploads/25459f73-8e47-433d-9375-dcc1fb8191a8.png')",
+          backgroundImage: "url('https://images.unsplash.com/photo-1545163143-47176c914d1b?q=80&w=2070')",
           filter: "blur(8px) brightness(0.9)",
         }}
       />
       
-      <div className="fixed inset-0 z-0 bg-black bg-opacity-40" />
+      <div className="fixed inset-0 z-0 bg-gradient-to-b from-black/30 via-black/50 to-black/70" />
       
       <div className="flex min-h-screen w-full items-center justify-center relative z-10">
-        <div className="w-full max-w-md bg-white bg-opacity-95 backdrop-blur-sm shadow-xl rounded-xl p-8 space-y-6">
+        <div className="w-full max-w-md bg-white/95 backdrop-blur-sm shadow-xl rounded-xl p-8 space-y-6">
           <div className="flex flex-col items-center justify-center mb-6">
             <Logo3d size={48} />
             <h1 className="text-2xl font-bold text-black mt-3 tracking-tight">Eu Fiscalizo</h1>
