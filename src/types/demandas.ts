@@ -13,6 +13,8 @@ export interface Localizacao {
   cidade: string;
   estado: string;
   complemento?: string;
+  latitude?: number;
+  longitude?: number;
 }
 
 export interface Demanda {
