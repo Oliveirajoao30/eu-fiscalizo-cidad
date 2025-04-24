@@ -38,7 +38,7 @@ const Acompanhar = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
-      <main className="flex-1 py-8">
+      <main className="flex-1 py-24">
         <div className="container">
           <div className="max-w-3xl mx-auto">
             <h1 className="text-2xl md:text-3xl font-bold text-eu-text mb-6">

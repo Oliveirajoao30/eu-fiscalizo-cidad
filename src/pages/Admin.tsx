@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
@@ -47,66 +46,13 @@ const Admin = () => {
   const [statusFilter, setStatusFilter] = useState<StatusDemanda | "todas">("todas");
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedDemanda, setSelectedDemanda] = useState<Demanda | null>(null);
-  const [isAdmin, setIsAdmin] = useState(false);
-
-  // Check user is admin via Supabase user_roles
-  useEffect(() => {
-    async function checkAdmin() {
-      if (!user) {
-        navigate("/login");
-        return;
-      }
-      
-      try {
-        // Query the user_roles table to check if user has admin role
-        const { data, error } = await supabase
-          .from('user_roles')
-          .select('role')
-          .eq('user_id', user.id)
-          .eq('role', 'admin')
-          .single();
-        
-        if (error) {
-          console.error("Error checking admin role:", error);
-          setIsAdmin(false);
-          navigate("/");
-          toast({
-            title: "Acesso negado",
-            description: "Você não tem permissão para acessar esta página.",
-            variant: "destructive"
-          });
-          return;
-        }
-        
-        if (data) {
-          setIsAdmin(true);
-        } else {
-          setIsAdmin(false);
-          navigate("/");
-          toast({
-            title: "Acesso negado",
-            description: "Você não tem permissão para acessar esta página.",
-            variant: "destructive"
-          });
-        }
-      } catch (error) {
-        console.error("Error in admin check:", error);
-        setIsAdmin(false);
-        navigate("/");
-      }
-    }
-    
-    checkAdmin();
-  }, [user, navigate, toast]);
-
-  // Fetch demandas
+  // Remove isAdmin state as we don't need this restriction anymore
+  
+  // Fetch demandas without admin check
   useEffect(() => {
     const fetchDemandas = async () => {
-      if (!isAdmin) return;
-
       setIsLoading(true);
       try {
-        // In a real app, you would fetch data from Supabase
         // For demo purposes, we'll use mock data
         setDemandas(demandasExemplo);
         setFilteredDemandas(demandasExemplo);
@@ -123,9 +69,9 @@ const Admin = () => {
     };
 
     fetchDemandas();
-  }, [isAdmin, toast]);
+  }, [toast]);
 
-  // Filter demandas by status and search term
+  // Keep existing filter effect
   useEffect(() => {
     let filtered = [...demandas];
     
@@ -218,14 +164,10 @@ const Admin = () => {
     }
   };
 
-  if (!user || !isAdmin) {
-    return <div className="flex items-center justify-center min-h-screen">Verificando permissões...</div>;
-  }
-
   return (
     <div className="min-h-screen flex flex-col bg-eu-gray-white">
       <Header />
-      <main className="flex-1 container py-8">
+      <main className="flex-1 container py-24">
         {/* Branding section above the admin panel heading */}
         <div className="flex flex-col items-center mb-6">
           <Logo3d size={44} />

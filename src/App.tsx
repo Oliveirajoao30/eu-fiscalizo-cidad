@@ -17,7 +17,7 @@ import { AuthProvider, useAuth } from "./hooks/useAuth";
 
 const queryClient = new QueryClient();
 
-function ProtectedRoute({ children, adminOnly = false }: { children: JSX.Element, adminOnly?: boolean }) {
+function ProtectedRoute({ children }: { children: JSX.Element, adminOnly?: boolean }) {
   const { user, loading } = useAuth();
   
   if (loading) {
@@ -27,9 +27,6 @@ function ProtectedRoute({ children, adminOnly = false }: { children: JSX.Element
   if (!user) {
     return <Navigate to="/login" replace />;
   }
-  
-  // For admin routes, you would add additional checks here
-  // For now, we're allowing all authenticated users to access the admin page
   
   return children;
 }
@@ -61,11 +58,8 @@ const App = () => (
                   <Confirmacao />
                 </ProtectedRoute>
               } />
-              <Route path="/admin" element={
-                <ProtectedRoute adminOnly={true}>
-                  <Admin />
-                </ProtectedRoute>
-              } />
+              {/* Changed from ProtectedRoute to directly rendering Admin */}
+              <Route path="/admin" element={<Admin />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
