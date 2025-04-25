@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -109,15 +108,15 @@ const Cadastro = () => {
     <div className="flex min-h-screen">
       {/* Background Image */}
       <div 
-        className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat"
+        className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat transition-all duration-500"
         style={{ 
-          backgroundImage: "url('public/lovable-uploads/59940332-a27a-4f8d-b77b-b0f7f16a1507.png')",
-          filter: "blur(8px)",
+          backgroundImage: "url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070')",
+          filter: "blur(8px) brightness(0.9)",
         }}
       />
       
       {/* Overlay */}
-      <div className="fixed inset-0 z-0 bg-black bg-opacity-40" />
+      <div className="fixed inset-0 z-0 bg-gradient-to-b from-black/30 via-black/50 to-black/70" />
       
       {/* Content */}
       <div className="flex min-h-screen w-full items-center justify-center relative z-10 py-10">
