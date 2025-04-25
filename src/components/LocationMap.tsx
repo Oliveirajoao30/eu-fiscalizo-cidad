@@ -6,8 +6,8 @@ import { useToast } from '@/hooks/use-toast';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
-// Import the leaflet declaration
-import '../types/leaflet';
+// Import the leaflet declaration with the correct extension
+import '../types/leaflet.d';
 
 interface LocationMapProps {
   onLocationSelect: (location: {
