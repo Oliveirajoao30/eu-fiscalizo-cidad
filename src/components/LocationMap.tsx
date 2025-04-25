@@ -6,6 +6,9 @@ import { useToast } from '@/hooks/use-toast';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
+// Import the leaflet declaration
+import '../types/leaflet';
+
 interface LocationMapProps {
   onLocationSelect: (location: {
     latitude: number;
@@ -61,7 +64,7 @@ const LocationMap: React.FC<LocationMapProps> = ({ onLocationSelect, className }
     };
 
     loadLeaflet().then(() => {
-      // @ts-ignore - Leaflet será carregado dinamicamente
+      // Now window.L is properly typed
       const L = window.L;
       
       const mapInstance = L.map(mapContainer).setView([latitude, longitude], 15);
