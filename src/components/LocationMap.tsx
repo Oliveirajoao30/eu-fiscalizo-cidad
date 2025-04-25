@@ -31,6 +31,7 @@ const LocationMap: React.FC<LocationMapProps> = ({ onLocationSelect, className }
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
   const [mapContainer, setMapContainer] = useState<HTMLDivElement | null>(null);
+  const [reverseGeocodingInProgress, setReverseGeocodingInProgress] = useState(false);
 
   // Função para inicializar o mapa com OpenStreetMap (não requer API key)
   const initializeLeafletMap = useCallback((latitude: number, longitude: number) => {
@@ -142,28 +143,39 @@ const LocationMap: React.FC<LocationMapProps> = ({ onLocationSelect, className }
   }, [initializeLeafletMap, initializeMapboxMap]);
 
   const updateLocation = useCallback(async (latitude: number, longitude: number) => {
+    // Prevenindo chamadas simultâneas à API de geocodificação
+    if (reverseGeocodingInProgress) return;
+    
+    setReverseGeocodingInProgress(true);
+    
     try {
       // Utiliza Nominatim (OpenStreetMap) para geocodificação reversa - não requer API key
       const response = await fetch(
-        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&addressdetails=1`
+        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&addressdetails=1`,
+        { headers: { 'Accept-Language': 'pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7' } }
       );
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
       const data = await response.json();
       
       if (data && data.address) {
-        const address = data.display_name;
+        const rua = data.address.road || data.address.street || '';
+        const numero = data.address.house_number || '';
         const bairro = data.address.suburb || data.address.neighbourhood || data.address.district || '';
         const cidade = data.address.city || data.address.town || data.address.village || '';
         const estado = data.address.state || '';
-        const rua = data.address.road || '';
-        const numero = data.address.house_number || '';
-        const complemento = '';
+        const complemento = data.address.postcode || '';
         
         const endereco = rua + (numero ? `, ${numero}` : '');
         
+        // Preencher mesmo campos parcialmente - é melhor do que nada
         onLocationSelect({ 
           latitude, 
           longitude, 
-          address: endereco || address, 
+          address: endereco || data.display_name || '', 
           bairro, 
           cidade, 
           estado,
@@ -175,20 +187,31 @@ const LocationMap: React.FC<LocationMapProps> = ({ onLocationSelect, className }
           description: "Os dados de endereço foram preenchidos automaticamente",
         });
       } else {
+        // Mesmo sem endereço, atualiza pelo menos as coordenadas
         onLocationSelect({ latitude, longitude });
+        toast({
+          title: "Informações parciais do endereço",
+          description: "Apenas as coordenadas foram obtidas. Por favor, complete os campos manualmente.",
+          variant: "default",
+        });
       }
     } catch (error) {
       console.error('Erro ao obter endereço:', error);
+      // Mesmo com erro, atualiza pelo menos as coordenadas
       onLocationSelect({ latitude, longitude });
       toast({
         title: "Não foi possível obter o endereço completo",
         description: "Por favor, preencha os campos manualmente",
         variant: "destructive",
       });
+    } finally {
+      setReverseGeocodingInProgress(false);
     }
-  }, [onLocationSelect, toast]);
+  }, [onLocationSelect, toast, reverseGeocodingInProgress]);
 
   const getCurrentLocation = useCallback(() => {
+    if (loading) return; // Previne múltiplos cliques
+    
     setLoading(true);
     navigator.geolocation.getCurrentPosition(
       (position) => {
@@ -223,13 +246,15 @@ const LocationMap: React.FC<LocationMapProps> = ({ onLocationSelect, className }
         initializeMap(-22.9068, -43.1729);
         setLoading(false);
       },
-      { enableHighAccuracy: true }
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
     );
-  }, [map, marker, initializeMap, updateLocation, toast]);
+  }, [map, marker, initializeMap, updateLocation, toast, loading]);
 
   useEffect(() => {
-    getCurrentLocation();
-  }, [getCurrentLocation]);
+    // Inicializa o mapa com coordenadas padrão
+    initializeMap(-22.9068, -43.1729); // Rio de Janeiro
+    // Não chama getCurrentLocation() automaticamente para evitar problemas de permissão
+  }, [initializeMap]);
 
   return (
     <div className={className}>
